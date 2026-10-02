@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi plan por intercambios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAFBF7; --surface:#FFFFFF; --ink:#1D2A23; --muted:#5E6B63; --line:#E2E7E0;
+  --p:#C23B4E; --c:#B88207; --f:#D9581C; --g:#6E7816; --v:#16806F;
+  --p-soft:#F9E4E7; --c-soft:#FBF0D6; --f-soft:#FCE6DA; --g-soft:#EEF0D6; --v-soft:#DDF2EE;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121915; --surface:#1A231E; --ink:#E9EFEA; --muted:#9DABA2; --line:#2B362F;
+    --p:#F06C7E; --c:#F0BC45; --f:#F58C55; --g:#B5C24A; --v:#3CC4AD;
+    --p-soft:#3A1F24; --c-soft:#3A3019; --f-soft:#3B2519; --g-soft:#2D3118; --v-soft:#173631;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121915; --surface:#1A231E; --ink:#E9EFEA; --muted:#9DABA2; --line:#2B362F;
+  --p:#F06C7E; --c:#F0BC45; --f:#F58C55; --g:#B5C24A; --v:#3CC4AD;
+  --p-soft:#3A1F24; --c-soft:#3A3019; --f-soft:#3B2519; --g-soft:#2D3118; --v-soft:#173631;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 12px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:28px 20px 64px}
+header h1{font-size:clamp(2.1rem,7vw,3.2rem);font-weight:800;letter-spacing:-.02em}
+header p{color:var(--muted);margin:.6rem 0 0;max-width:56ch}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--v);outline-offset:2px}
+
+.mode{display:inline-flex;margin-top:22px;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:4px}
+.mode button{font:inherit;font-weight:700;border:0;background:transparent;color:var(--muted);padding:9px 20px;border-radius:999px;cursor:pointer}
+.mode button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* chips */
+.chip{font:inherit;font-weight:700;font-size:.95rem;display:inline-flex;align-items:center;gap:6px;
+  border:0;background:var(--soft);color:var(--col);padding:7px 12px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.chip .n{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.chip.extra{outline:2px dashed var(--col);outline-offset:-2px}
+.chip:hover{filter:brightness(.97)}
+
+/* day totals */
+.totals{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:28px 0 0}
+.total{font:inherit;border:0;text-align:left;cursor:pointer;border-radius:16px;padding:12px;background:var(--soft);color:var(--ink)}
+.total b{display:block;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:2.2rem;font-weight:800;color:var(--col);line-height:1;font-variant-numeric:tabular-nums}
+.total span{font-size:.88rem;color:var(--muted)}
+.hint{color:var(--muted);font-size:.9rem;margin:10px 0 0}
+
+/* meals */
+.meals{margin-top:26px;border-top:1.5px solid var(--line)}
+.meal{padding:18px 0;border-bottom:1.5px solid var(--line)}
+.meal h3{font-size:1.35rem;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.eg{margin:10px 0 0;color:var(--muted)}
+.eg strong{color:var(--ink);font-weight:700}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.opt{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px}
+.opt h4{margin:0 0 4px;font-size:1rem}
+.opt p{margin:0;color:var(--muted);font-size:.95rem}
+.small{font-size:.88rem;color:var(--muted);margin:8px 0 0}
+
+section{margin-top:52px}
+section>h2{font-size:clamp(1.6rem,5vw,2.1rem);font-weight:800;letter-spacing:-.01em}
+section>p.lead{color:var(--muted);margin:.5rem 0 0}
+
+/* equivalences */
+.groups{margin-top:16px}
+details{border-radius:16px;background:var(--surface);border:1.5px solid var(--line);margin-bottom:10px;overflow:hidden}
+details[open]{border-color:var(--col)}
+summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--soft)}
+summary::-webkit-details-marker{display:none}
+summary h3{font-size:1.2rem;color:var(--col)}
+summary .def{font-size:.92rem;color:var(--muted);text-align:right}
+summary::after{content:"+";font:800 1.4rem "Bricolage Grotesque",system-ui,sans-serif;color:var(--col)}
+details[open] summary::after{content:"–"}
+.foods{list-style:none;margin:0;padding:0 16px 6px}
+.foods li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.foods li:last-child{border-bottom:0}
+.foods li em{display:block;font-style:normal;font-size:.85rem;color:var(--muted)}
+.foods li b{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:1.35rem;font-weight:800;color:var(--col);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.foods .w{text-align:right;flex-shrink:0}
+.foods .w small{display:block;font-size:.85rem;color:var(--muted);max-width:22ch;margin-left:auto}
+.notes{margin:18px 0 0;padding-left:1.2rem}
+.notes li{margin:.55rem 0;max-width:64ch}
+
+.p{--col:var(--p);--soft:var(--p-soft)} .c{--col:var(--c);--soft:var(--c-soft)}
+.f{--col:var(--f);--soft:var(--f-soft)} .g{--col:var(--g);--soft:var(--g-soft)}
+.v{--col:var(--v);--soft:var(--v-soft)}
+
+@media (max-width:600px){
+  .totals{grid-template-columns:repeat(3,1fr)}
+  .options{grid-template-columns:1fr}
+  summary{flex-wrap:wrap}
+  summary .def{text-align:left;flex-basis:100%;order:3}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Mi plan por intercambios</h1>
+  <p>Elige el tipo de día y mira cuántas porciones te tocan. Toca cualquier grupo para ver cuánto es una porción. Todos los pesos son en crudo.</p>
+  <div class="mode" role="group" aria-label="Tipo de día">
+    <button type="button" data-mode="descanso" aria-pressed="true">Descanso</button>
+    <button type="button" data-mode="entreno" aria-pressed="false">Entreno</button>
+  </div>
+</header>
+
+<div class="totals" id="totals"></div>
+<p class="hint">Porciones totales del día.</p>
+
+<div class="meals" id="meals"></div>
+
+<section id="porciones">
+  <h2>Cuánto es una porción</h2>
+  <p class="lead">Dentro de cada grupo, cualquier alimento de la lista vale lo mismo.</p>
+  <div class="groups" id="groups"></div>
+</section>
+
+<section>
+  <h2>Para tener en cuenta</h2>
+  <ul class="notes">
+    <li>El yogur griego que cuenta como proteína es el <strong>0% o ligero</strong>. El griego normal tiene mucha grasa y poca proteína, así que no sirve como porción de proteína.</li>
+    <li>Las medidas caseras son aproximadas: taza de 240 ml, cucharada sopera y cucharadita de café, siempre rasas salvo que se indique. Si tienes la balanza a mano, el peso manda.</li>
+    <li>Si cocinas en tandas, pesa todo en crudo, cocina, pesa el total cocinado y divide. Así sabes cuánto cocinado equivale a tu porción.</li>
+    <li>El aceite de cocinar cuenta como grasa.</li>
+    <li>Puedes mover porciones entre comidas. Lo que importa es el total del día.</li>
+    <li>En días de entreno, pon el carbohidrato extra en la comida más cercana al entreno.</li>
+    <li>Pésate 2 o 3 mañanas por semana y mira la media. Un buen ritmo es perder entre 0,3 y 0,5 kg por semana. Si en 3 semanas la media no baja, quita 1 carbohidrato los días de descanso.</li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+const GROUPS = {
+  p:{name:"Proteína", def:"1 porción ≈ 20–22 g de proteína", foods:[
+    ["Pechuga de pollo o pavo","100 g",""],
+    ["Ternera magra, lomo de cerdo o solomillo","100 g",""],
+    ["Pescado blanco (merluza, bacalao fresco, lubina)","125 g",""],
+    ["Salmón o caballa","100 g","","Cuenta además 1 porción de grasa"],
+    ["Gambas o langostinos pelados","110 g",""],
+    ["Atún al natural, escurrido","85 g","≈ 1½ latas pequeñas"],
+    ["Claras de huevo","200 g","≈ 6 claras"],
+    ["Huevos enteros","3 M","","Cuentan además 1 porción de grasa"],
+    ["Yogur griego 0% o skyr","200 g","≈ ¾ de taza"],
+    ["Queso fresco batido 0%","250 g","≈ 1 taza"],
+    ["Tofu firme","150 g",""],
+    ["Proteína en polvo (whey)","25 g","≈ 1 cacito medidor"]]},
+  c:{name:"Carbohidratos", def:"1 porción ≈ 25 g de hidratos", foods:[
+    ["Arroz, en seco","30 g","≈ 2½ cucharadas"],
+    ["Pasta corta, en seco","35 g","≈ ⅓ de taza"],
+    ["Quinoa o cuscús, en seco","35–40 g","≈ ¼ de taza"],
+    ["Avena","40 g","≈ ½ taza (7 cucharadas)"],
+    ["Patata","150 g","≈ 1 patata mediana"],
+    ["Boniato","125 g","≈ ½ boniato mediano"],
+    ["Pan blanco o integral","50 g","≈ 2 rebanadas de pan de molde"],
+    ["Legumbre seca (lentejas, garbanzos)","45 g","≈ ¼ de taza"],
+    ["Tortitas de arroz o maíz","3 uds.",""],
+    ["Wrap sin gluten Old El Paso","1 wrap","≈ 54 g","Cuenta como 1 porción, quizás algo más"],
+    ["Arroz cocido","90 g","≈ ½ taza","Ya hecho o de bandeja"],
+    ["Arroz en vasito precocinado","1 vasito","125 g","Cuenta como 1½ porciones"],
+    ["Pasta cocida","90 g","≈ ⅔ de taza"],
+    ["Quinoa cocida","120 g","≈ ⅔ de taza"],
+    ["Cuscús cocido","110 g","≈ ⅔ de taza"],
+    ["Patata cocida o asada","125 g","≈ 1 patata pequeña"],
+    ["Boniato asado","120 g","≈ ½ boniato mediano"],
+    ["Legumbre cocida o de bote, escurrida","150 g","≈ 1 taza escasa"]]},
+  f:{name:"Fruta", def:"1 porción ≈ 15 g de hidratos, sin piel ni hueso", foods:[
+    ["Manzana o pera","150 g","≈ 1 mediana"],
+    ["Kiwi","150 g","≈ 2 kiwis"],
+    ["Naranja o mandarina","180 g","≈ 1 naranja grande o 2 mandarinas"],
+    ["Plátano","90 g","≈ ¾ de plátano mediano"],
+    ["Fresas o frutos rojos","220 g","≈ 1½ tazas"],
+    ["Mango o piña","110 g","≈ ⅔ de taza en dados"],
+    ["Uvas","100 g","≈ ⅔ de taza"]]},
+  g:{name:"Grasa", def:"1 porción ≈ 10 g de grasa", foods:[
+    ["Aceite de oliva","10 g","≈ 2 cucharaditas"],
+    ["Aguacate","50 g","≈ ⅓ de aguacate mediano"],
+    ["Frutos secos naturales","15 g","≈ 12 almendras o 3 nueces"],
+    ["Crema de cacahuete 100%","15 g","≈ 1 cucharada"],
+    ["Chía","30 g","≈ 2 cucharadas"],
+    ["Queso curado o semicurado","30 g",""],
+    ["Aceitunas sin hueso","70 g","≈ 20 aceitunas"],
+    ["Chocolate 85% o más","20 g","≈ 2 onzas"]]},
+  v:{name:"Verdura", def:"Libre, mínimo 300 g al día", foods:[
+    ["Todas las verduras y hortalizas","libre",""],
+    ["Patata, maíz y guisantes","—","","Estas cuentan como carbohidrato"]]}
+};
+const ORDER = ["p","c","f","g","v"];
+
+const MEALS = [
+  {name:"Desayuno", base:{p:1,c:1,f:1,g:1},
+   options:[
+     {title:"Huevos con pan", text:"2 huevos + 100 g de yogur griego 0% (6 cucharadas) + 50 g de pan (2 rebanadas de molde) + 1 fruta"},
+     {title:"Huevos con avena", text:"2 huevos + 30 g de avena (5 cucharadas) + 250 ml de leche desnatada (1 taza) + 15 g de chía (1 cucharada) + 1 fruta"}
+   ],
+   small:"En las dos opciones, los huevos son tu grasa del desayuno. En la opción avena, la leche completa la proteína y suma al carbohidrato, así que no hace falta yogur. La chía añade media grasa extra: compénsala usando 5 g menos de aceite (1 cucharadita) en la comida o la cena."},
+  {name:"Comida", base:{p:2,c:2,g:1,v:1},
+   eg:"200 g de pollo + 60 g de arroz (5 cucharadas) + verduras salteadas con 10 g de aceite (2 cucharaditas)"},
+  {name:"Merienda", base:{p:1,f:1}, extra:{c:1},
+   eg:"200 g de yogur griego 0% (¾ de taza) + 1 fruta",
+   egExtra:"200 g de yogur griego 0% (¾ de taza) + 1 fruta + 3 tortitas de arroz"},
+  {name:"Cena", base:{p:1,c:1,g:1,v:1},
+   eg:"125 g de merluza + 150 g de patata (1 mediana) + ensalada con 50 g de aguacate (⅓ de aguacate)"}
+];
+
+let mode = "descanso";
+try{ const m = localStorage.getItem("plan-intercambios:mode"); if(m==="entreno"||m==="descanso") mode = m; }catch(e){}
+
+function portions(meal){
+  const out = {};
+  Object.entries(meal.base).forEach(([k,n])=>out[k]={n,extra:false});
+  if(mode==="entreno" && meal.extra) Object.entries(meal.extra).forEach(([k,n])=>{
+    out[k] = out[k] ? {n:out[k].n+n, extra:true} : {n, extra:true};
+  });
+  return out;
+}
+
+function chip(k, n, extra){
+  const label = k==="v" ? "libre" : n;
+  return `<button type="button" class="chip ${k}${extra?' extra':''}" data-g="${k}" aria-label="${GROUPS[k].name}, ${label}${extra?', incluye extra de entreno':''}. Ver equivalencias">${GROUPS[k].name} <span class="n">(${label})</span></button>`;
+}
+
+function render(){
+  document.querySelectorAll(".mode button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.mode===mode));
+
+  const sum = {p:0,c:0,f:0,g:0};
+  MEALS.forEach(m=>Object.entries(portions(m)).forEach(([k,v])=>{ if(k in sum) sum[k]+=v.n; }));
+  document.getElementById("totals").innerHTML = ORDER.map(k=>
+    `<button type="button" class="total ${k}" data-g="${k}"><b>${k==="v"?"libre":sum[k]}</b><span>${GROUPS[k].name}</span></button>`
+  ).join("");
+
+  document.getElementById("meals").innerHTML = MEALS.map(m=>{
+    const por = portions(m);
+    const chips = ORDER.filter(k=>por[k]).map(k=>chip(k, por[k].n, por[k].extra)).join("");
+    let body = "";
+    if(m.options){
+      body = `<div class="options">${m.options.map(o=>`<div class="opt"><h4>${o.title}</h4><p>${o.text}</p></div>`).join("")}</div>`;
+    } else {
+      const eg = (mode==="entreno" && m.egExtra) ? m.egExtra : m.eg;
+      body = `<p class="eg"><strong>Ejemplo:</strong> ${eg}</p>`;
+    }
+    const extraNote = (mode==="entreno" && m.extra) ? `<p class="small">El recuadro punteado incluye el carbohidrato extra de los días de entreno.</p>` : "";
+    return `<div class="meal"><h3>${m.name}</h3><div class="chips">${chips}</div>${body}${m.small?`<p class="small">${m.small}</p>`:""}${extraNote}</div>`;
+  }).join("");
+}
+
+// equivalences
+document.getElementById("groups").innerHTML = ORDER.map(k=>{
+  const g = GROUPS[k];
+  return `<details class="${k}" id="g-${k}"><summary><h3>${g.name}</h3><span class="def">${g.def}</span></summary>
+  <ul class="foods">${g.foods.map(f=>`<li><span>${f[0]}${f[3]?`<em>${f[3]}</em>`:""}</span><span class="w"><b>${f[1]}</b>${f[2]?`<small>${f[2]}</small>`:""}</span></li>`).join("")}</ul></details>`;
+}).join("");
+
+function openGroup(k){
+  document.querySelectorAll("#groups details").forEach(d=>d.open = (d.id==="g-"+k));
+  const d = document.getElementById("g-"+k);
+  d.scrollIntoView({block:"start"});
+  d.querySelector("summary").focus({preventScroll:true});
+}
+
+document.addEventListener("click", e=>{
+  const b = e.target.closest("[data-g]");
+  if(b && (b.classList.contains("chip") || b.classList.contains("total"))) openGroup(b.dataset.g);
+});
+document.querySelectorAll(".mode button").forEach(b=>b.addEventListener("click", ()=>{
+  mode = b.dataset.mode;
+  try{ localStorage.setItem("plan-intercambios:mode", mode); }catch(e){}
+  render();
+}));
+
+render();
+</script>
+</body>
+</html>
